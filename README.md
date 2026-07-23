@@ -26,6 +26,10 @@
 
 VibHearing listens for meaningful acoustic events, extracts compact signal features, and maps recognized events to consistent vibration patterns. It does **not** try to reproduce sound. Instead, it explores whether a small, learnable haptic vocabulary can make important events easier to notice.
 
+![VibHearing collar prototype](assets/vibhearing-collar-prototype.gif)
+
+*Early wearable prototype demonstrating the current collar form factor.*
+
 The current prototype focuses on a wearable for deaf and hard-of-hearing cats. The same modular firmware architecture can also support research involving:
 
 - deaf cats and other animal-welfare applications;
@@ -98,6 +102,15 @@ These are future research directions, not validated product claims. Each use cas
 | Validation | Build, upload, and short runtime smoke tests completed; controlled acoustic, electrical, enclosure, and behavioral tests remain |
 
 The label `human_voice` means that a frame sequence matches the current voice-activity heuristic. It does not identify words, speakers, or semantic meaning, and it is not yet a reliable source classifier.
+
+## Working Demo
+
+[Watch the working prototype demo](assets/vibhearing-working-demo.mp4)
+
+The demo shows live audio telemetry, provisional human-voice detection, and haptic motor activation on the development hardware.
+
+> [!NOTE]
+> This video is a proof of concept for an experimental sensory-substitution prototype, not evidence of reliability or product safety. VibHearing is not a medical hearing device, and its human-voice detection remains an uncalibrated heuristic. The wearable footage demonstrates the early collar form factor only; it should not be interpreted as an active-motor test on an animal.
 
 ## Hardware
 

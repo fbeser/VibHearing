@@ -231,3 +231,20 @@ history. Keep claims separate from work that still needs hardware validation.
   1,063,638 bytes flash (54.1%). The live device page contained the required
   English copy, no searched Turkish UI terms, valid JavaScript, and the status
   API continued to return all 256 waveform samples.
+
+### 2026-07-23 - Prototype media
+
+- Moved the root prototype GIF and MP4 into `assets/` with descriptive,
+  stable English filenames.
+- Added the collar-form-factor GIF near the README introduction and a direct
+  MP4 link in a dedicated working-demo section.
+- Kept the media descriptions within current evidence: early experimental
+  sensory-substitution hardware, uncalibrated heuristic voice detection, no
+  medical-device claim, no reliability or product-safety claim, and no
+  implication of active-motor testing on an animal.
+- Verified GIF and MP4 file signatures, exact README path casing, one reference
+  per asset, one working-demo heading, and removal of the original root paths.
+  The GIF is 7,111,706 bytes and the MP4 is 28,042,050 bytes; the latter is
+  linked instead of embedded because inline video behavior varies by client.
+- Before publication, the GIF was optimized to 3,313,109 bytes (3.16 MiB)
+  without changing its path or GIF89a validity.
