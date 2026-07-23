@@ -39,6 +39,10 @@ The current prototype focuses on a wearable for deaf and hard-of-hearing cats. T
 
 ## Why?
 
+VibHearing started with a personal motivation. My own cat is deaf, which led me to wonder whether meaningful environmental sounds could be translated into simple vibration patterns instead of audio. That question became the starting point for this open-source research project.
+
+The project is being developed in the open so anyone can learn from it, contribute to it, or build upon it.
+
 Millions of humans and animals cannot rely on hearing to understand what is happening around them. Conventional approaches often focus on amplifying or recreating audio, but that is not the only possible interface.
 
 VibHearing explores a different question:
