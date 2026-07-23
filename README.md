@@ -268,10 +268,28 @@ Thoughtful contributions are welcome. You can help by:
 
 Please read the specification and roadmap before changing safety-sensitive behavior. Pull requests should describe what was tested, on which hardware, and what still requires physical validation.
 
-## Support the project
+## Support VibHearing
 
-- ⭐ [Star this repository](https://github.com/fbeser/VibHearing) to follow its progress.
-- ❤️ **Buy Me a Coffee** — coming soon.
+VibHearing is developed as an open-source experimental research project.
+
+GitHub sponsorship helps fund:
+
+- prototype hardware and electronic components,
+- sensors and batteries,
+- custom PCB prototypes,
+- 3D-printed enclosures and wearable parts,
+- controlled testing and validation,
+- continued firmware, signal-processing, and documentation work.
+
+You can support the project through [GitHub Sponsors](https://github.com/sponsors/fbeser).
+
+Sponsorship supports ongoing research and development. It does not represent the sale of a finished medical, veterinary, safety, or consumer product.
+
+### Project sponsors
+
+Thank you to everyone supporting the continued development of VibHearing.
+
+Sponsors who choose public recognition may be acknowledged here.
 
 ## Disclaimer
 

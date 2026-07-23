@@ -248,3 +248,11 @@ history. Keep claims separate from work that still needs hardware validation.
   linked instead of embedded because inline video behavior varies by client.
 - Before publication, the GIF was optimized to 3,313,109 bytes (3.16 MiB)
   without changing its path or GIF89a validity.
+
+### 2026-07-24 - GitHub Sponsors integration
+
+- Added `.github/FUNDING.yml` for the `fbeser` GitHub Sponsors profile.
+- Added README sections explaining how sponsorship supports prototype
+  hardware, testing, firmware, signal processing, and documentation.
+- Kept the funding language explicitly experimental and avoided medical,
+  veterinary, safety, or product-readiness claims.
