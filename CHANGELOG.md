@@ -21,6 +21,7 @@ and the project intends to use Semantic Versioning once releases begin.
   distinct haptic tokens, and an all-salient-sound fallback.
 - Local Wi-Fi dashboard, mDNS discovery, JSON telemetry/settings APIs, live
   256-sample waveform plot, FFT visualization, and device status.
+- Non-blocking, extensible serial command processor with `r`/`reset` restart.
 - Product specification, roadmap, haptic language, project overview, and
   living development journal.
 

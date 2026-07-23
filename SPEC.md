@@ -203,6 +203,16 @@ through router port forwarding. Authentication, CSRF protection, TLS or an
 authenticated application protocol, rate limiting, and credential
 provisioning are required before field use.
 
+## Serial commands
+
+The non-blocking serial command processor shares the 115200 baud development
+port with telemetry. Commands are terminated by CR/LF or accepted after a
+50 ms receive-idle period. The initial `r` command (also available as `reset`)
+logs an acknowledgement, flushes pending serial output, and restarts the
+ESP32-C3. Unknown and oversized commands are rejected without changing device
+state. Additional commands must be added through the processor rather than
+direct parsing in the application loop.
+
 ## Configuration
 
 Current hardware and conservative feature flags are compile-time constants.

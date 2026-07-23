@@ -14,6 +14,7 @@
 #include "MotorDriver.h"
 #include "ProjectConfig.h"
 #include "RuntimeSettings.h"
+#include "SerialCommandProcessor.h"
 #include "WebDashboard.h"
 
 namespace {
@@ -36,6 +37,7 @@ HapticEncoder hapticEncoder(leftMotor, rightMotor, runtimeSettings);
 BleService bleService;
 BatteryMonitor batteryMonitor;
 WebDashboard webDashboard(runtimeSettings);
+SerialCommandProcessor serialCommandProcessor;
 bool audioReady = false;
 uint32_t lastMetricsLogMs = 0;
 
@@ -87,6 +89,7 @@ void setup() {
 
 void loop() {
   const uint32_t nowMs = millis();
+  serialCommandProcessor.update();
   hapticEncoder.update(nowMs);
   bleService.update();
   webDashboard.update();

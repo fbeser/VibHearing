@@ -79,6 +79,8 @@ history. Keep claims separate from work that still needs hardware validation.
 - Event rhythm identifies meaning while received acoustic strength controls
   bounded intensity; strength is not presented as a distance measurement.
 - Feature flags default optional or electrically undefined hardware to off.
+- Serial commands are isolated in `SerialCommandProcessor`; the application
+  loop only polls it, so future commands do not spread parsing logic.
 
 ## Session History
 
@@ -207,3 +209,25 @@ history. Keep claims separate from work that still needs hardware validation.
   1,063,116 bytes flash). In the same running-printer environment, the next
   30-second/60-sample API test produced 55 `none`, 5 non-haptic
   `environmental_sound`, and zero `human_voice`, with no request failures.
+
+### 2026-07-23 - Serial command foundation
+
+- Added a bounded, non-blocking serial command processor that accepts commands
+  by line ending or a short receive-idle timeout.
+- Added `r` and `reset` as restart commands; unknown and oversized input is
+  rejected without changing device state.
+- Release build passed at 44,072 bytes RAM (13.4%) and 1,063,630 bytes flash
+  (54.1%), then uploaded successfully to COM11. Live serial tests confirmed
+  rejection of `xyz`, restart acknowledgement for both `r` with a line ending
+  and bare `r` via the idle timeout, followed by fresh startup and I2S-ready
+  messages.
+
+### 2026-07-23 - English dashboard copy
+
+- Converted every user-visible dashboard heading, label, connection state,
+  unit suffix, helper sentence, and settings result message from Turkish to
+  English. API field names and firmware behavior were unchanged.
+- Release build and COM11 upload passed at 44,072 bytes RAM (13.4%) and
+  1,063,638 bytes flash (54.1%). The live device page contained the required
+  English copy, no searched Turkish UI terms, valid JavaScript, and the status
+  API continued to return all 256 waveform samples.
