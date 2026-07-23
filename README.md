@@ -12,6 +12,7 @@
 ![Build Status](https://img.shields.io/badge/build-CI%20planned-lightgrey?style=flat-square)
 [![GitHub Stars](https://img.shields.io/github/stars/fbeser/VibHearing?style=flat-square&logo=github)](https://github.com/fbeser/VibHearing/stargazers)
 [![Last Commit](https://img.shields.io/github/last-commit/fbeser/VibHearing?style=flat-square&logo=github)](https://github.com/fbeser/VibHearing/commits)
+[![Patreon](https://img.shields.io/badge/Support-Patreon-FF424D?logo=patreon&logoColor=white)](https://patreon.com/VibHearing)
 
 # VibHearing
 
@@ -282,6 +283,8 @@ GitHub sponsorship helps fund:
 - continued firmware, signal-processing, and documentation work.
 
 You can support the project through [GitHub Sponsors](https://github.com/sponsors/fbeser).
+
+**Patreon:** https://patreon.com/VibHearing
 
 Sponsorship supports ongoing research and development. It does not represent the sale of a finished medical, veterinary, safety, or consumer product.
 
