@@ -5,18 +5,11 @@
 #include <driver/i2s_std.h>
 
 #include "AudioBuffer.h"
+#include "AudioFeatures.h"
 #include "FFTAnalyzer.h"
+#include "ProjectConfig.h"
 
 namespace vibhearing {
-
-struct AudioFeatures {
-  float rms{0.0F};
-  float peak{0.0F};
-  float gain{1.0F};
-  float noiseFloor{0.001F};
-  BandEnergies bands{};
-  std::array<int16_t, config::kWaveformSamples> waveform{};
-};
 
 class AudioEngine final {
  public:
@@ -27,7 +20,9 @@ class AudioEngine final {
   void extractLevelFeatures(AudioFeatures& features);
   void updateAdaptiveLevels(AudioFeatures& features);
 
-  std::array<int32_t, config::kAudioFrameSamples> rawSamples_{};
+  std::array<int32_t,
+             config::kAudioFrameSamples * config::kI2sSlotsPerFrame>
+      rawSamples_{};
   AudioBuffer buffer_{};
   FFTAnalyzer fft_{};
   i2s_chan_handle_t receiveChannel_{nullptr};

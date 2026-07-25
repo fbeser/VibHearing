@@ -4,21 +4,9 @@
 #include <complex>
 
 #include "AudioBuffer.h"
+#include "AudioFeatures.h"
 
 namespace vibhearing {
-
-enum class FrequencyBand : uint8_t {
-  Bass,
-  LowMid,
-  Mid,
-  Voice,
-  Presence,
-  High,
-  Count
-};
-
-using BandEnergies =
-    std::array<float, static_cast<size_t>(FrequencyBand::Count)>;
 
 class FFTAnalyzer final {
  public:

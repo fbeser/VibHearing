@@ -1,7 +1,7 @@
 #pragma once
 
-#include "AudioEngine.h"
 #include "AudioEvent.h"
+#include "AudioFeatures.h"
 
 namespace vibhearing {
 

@@ -4,11 +4,14 @@
 
 namespace vibhearing {
 
-void AudioBuffer::load(const int32_t* rawSamples, const size_t sampleCount) {
-  size_ = std::min(sampleCount, samples_.size());
+void AudioBuffer::load(const int32_t* rawSamples, const size_t rawWordCount,
+                       const size_t sampleStride) {
+  const size_t stride = std::max<size_t>(sampleStride, 1U);
+  size_ = std::min(rawWordCount / stride, samples_.size());
   float frameMean = 0.0F;
   for (size_t index = 0; index < size_; ++index) {
-    const int32_t sample = rawSamples[index] >> config::kMicrophoneWordShift;
+    const int32_t sample =
+        rawSamples[index * stride] >> config::kMicrophoneWordShift;
     samples_[index] = static_cast<float>(sample) / config::kMicrophoneFullScale;
     frameMean += samples_[index];
   }

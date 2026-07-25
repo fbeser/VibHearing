@@ -256,3 +256,40 @@ history. Keep claims separate from work that still needs hardware validation.
   hardware, testing, firmware, signal processing, and documentation.
 - Kept the funding language explicitly experimental and avoided medical,
   veterinary, safety, or product-readiness claims.
+
+### 2026-07-25 - Native signal tests and firmware CI
+
+- Separated hardware-independent signal configuration and audio feature types
+  from Arduino and ESP-IDF headers so signal-processing code can run on a host.
+- Added native tests that verify silence handling, feature-math edge cases, and
+  all six FFT bands with generated tones at their nominal center frequencies.
+- Added GitHub Actions coverage for native tests and a clean XIAO ESP32-C3
+  firmware build, and replaced the planned-CI badge with the workflow badge.
+- These generated-tone tests validate the software FFT mapping only. Target
+  microphone response, real-time frame loss, and enclosure acoustics still
+  require hardware measurements.
+
+### 2026-07-25 - I2S slot-compaction hardware finding
+
+- Built and uploaded the CI/test revision to the connected XIAO ESP32-C3 on
+  COM11, then verified serial restart, I2S startup, Wi-Fi, dashboard HTTP 200,
+  six FFT bands, and 256 waveform values.
+- Live API inspection found that every odd waveform value was constant within
+  each frame while even values carried audio. Five frames reproduced the
+  pattern, showing that the selected mono I2S slot was interleaved with an
+  empty slot.
+- Updated capture to read both standard-I2S slots for 256 time samples and
+  compact the connected left microphone slot before level and FFT processing.
+- Added a native regression test for active-slot compaction. Generated-tone
+  tests remain software-only.
+- Four native tests and the release build passed; the corrected firmware was
+  uploaded to COM11 at 45,096 bytes RAM (13.8%) and 1,064,708 bytes flash
+  (54.2%).
+- Five post-fix API frames contained 60-101 distinct values in both even and
+  odd waveform positions, confirming 256 live time samples instead of 128
+  samples interleaved with an empty slot. The dashboard returned HTTP 200,
+  the API returned six FFT bands, and a six-second serial observation showed
+  continuous metrics without I2S errors.
+- One uncontrolled high-energy sound produced `human_voice`; label accuracy
+  cannot be inferred. Because corrected sampling changes RMS and spectral
+  inputs, all previous heuristic tuning requires controlled recalibration.

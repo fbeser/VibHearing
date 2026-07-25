@@ -77,7 +77,8 @@ bool AudioEngine::capture(AudioFeatures& features) {
     return false;
   }
 
-  buffer_.load(rawSamples_.data(), bytesRead / sizeof(rawSamples_[0]));
+  buffer_.load(rawSamples_.data(), bytesRead / sizeof(rawSamples_[0]),
+               config::kI2sSlotsPerFrame);
   extractLevelFeatures(features);
   updateAdaptiveLevels(features);
   features.bands = fft_.analyze(buffer_.samples(), gain_);

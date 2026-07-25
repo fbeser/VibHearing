@@ -3,7 +3,7 @@
 #include <array>
 #include <cstddef>
 
-#include "ProjectConfig.h"
+#include "SignalConfig.h"
 
 namespace vibhearing {
 
@@ -11,7 +11,8 @@ class AudioBuffer final {
  public:
   using Samples = std::array<float, config::kAudioFrameSamples>;
 
-  void load(const int32_t* rawSamples, size_t sampleCount);
+  void load(const int32_t* rawSamples, size_t rawWordCount,
+            size_t sampleStride = 1);
   const Samples& samples() const;
   size_t size() const;
 

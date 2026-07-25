@@ -9,7 +9,7 @@
 ![Sensory Substitution](https://img.shields.io/badge/sensory-substitution-0891b2?style=flat-square)
 ![Wi-Fi Dashboard](https://img.shields.io/badge/Wi--Fi-dashboard-0f766e?style=flat-square&logo=wifi&logoColor=white)
 ![TinyML Ready](https://img.shields.io/badge/TinyML-architecture%20ready-8b5cf6?style=flat-square)
-![Build Status](https://img.shields.io/badge/build-CI%20planned-lightgrey?style=flat-square)
+[![Firmware](https://github.com/fbeser/VibHearing/actions/workflows/firmware.yml/badge.svg)](https://github.com/fbeser/VibHearing/actions/workflows/firmware.yml)
 [![GitHub Stars](https://img.shields.io/github/stars/fbeser/VibHearing?style=flat-square&logo=github)](https://github.com/fbeser/VibHearing/stargazers)
 [![Last Commit](https://img.shields.io/github/last-commit/fbeser/VibHearing?style=flat-square&logo=github)](https://github.com/fbeser/VibHearing/commits)
 [![Patreon](https://img.shields.io/badge/Support-Patreon-FF424D?logo=patreon&logoColor=white)](https://patreon.com/VibHearing)
