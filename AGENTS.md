@@ -307,3 +307,7 @@ history. Keep claims separate from work that still needs hardware validation.
   release build passed at 45,096 bytes RAM (13.8%) and 1,064,708 bytes flash
   (54.2%). This was a host build validation; no board upload or hardware
   observation was performed in this session.
+- The first clean GitHub Actions run exposed a separate missing-header issue:
+  the ignored local `WifiSecrets.h` is intentionally absent in CI. The
+  workflow now copies the tracked placeholder configuration before compiling;
+  no real Wi-Fi credentials are stored or used by CI.
