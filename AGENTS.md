@@ -293,3 +293,21 @@ history. Keep claims separate from work that still needs hardware validation.
 - One uncontrolled high-energy sound produced `human_voice`; label accuracy
   cannot be inferred. Because corrected sampling changes RMS and spectral
   inputs, all previous heuristic tuning requires controlled recalibration.
+
+### 2026-07-28 - Reproducible ESP32 CI toolchain
+
+- Replaced the ambiguous `espressif32` platform selection with the exact
+  pioarduino `54.03.20` release used by the validated local environment:
+  Arduino-ESP32 3.2.0, ESP-IDF 5.4 libraries, and the GCC 14.2.0 RISC-V
+  toolchain.
+- Explicitly removed an inherited GNU++11 flag while retaining GNU++17 so
+  clean CI environments compile the standard I2S API and C++17 firmware
+  consistently.
+- All four native signal-processing tests passed and a clean XIAO ESP32-C3
+  release build passed at 45,096 bytes RAM (13.8%) and 1,064,708 bytes flash
+  (54.2%). This was a host build validation; no board upload or hardware
+  observation was performed in this session.
+- The first clean GitHub Actions run exposed a separate missing-header issue:
+  the ignored local `WifiSecrets.h` is intentionally absent in CI. The
+  workflow now copies the tracked placeholder configuration before compiling;
+  no real Wi-Fi credentials are stored or used by CI.

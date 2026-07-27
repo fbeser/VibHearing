@@ -25,5 +25,8 @@ jobs:
       - name: Run native signal-processing tests
         run: pio test -e native
 
+      - name: Create CI Wi-Fi configuration
+        run: cp include/WifiSecrets.example.h include/WifiSecrets.h
+
       - name: Build XIAO ESP32-C3 firmware
         run: pio run -e seeed_xiao_esp32c3
