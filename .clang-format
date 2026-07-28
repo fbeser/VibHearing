@@ -1,0 +1,12 @@
+BasedOnStyle: Google
+SortIncludes: false
+IndentWidth: 4
+UseTab: Always
+TabWidth: 4
+IncludeBlocks: Merge
+IndentGotoLabels: true
+NamespaceIndentation: All
+KeepEmptyLinesAtTheStartOfBlocks: true
+AllowShortFunctionsOnASingleLine: false
+BreakBeforeBraces: Attach
+ColumnLimit: 120

@@ -11,23 +11,21 @@
 
 namespace vibhearing {
 
-class AudioEngine final {
- public:
-  bool begin();
-  bool capture(AudioFeatures& features);
+	class AudioEngine final {
+	   public:
+		bool begin();
+		bool capture(AudioFeatures& features);
 
- private:
-  void extractLevelFeatures(AudioFeatures& features);
-  void updateAdaptiveLevels(AudioFeatures& features);
+	   private:
+		void extractLevelFeatures(AudioFeatures& features);
+		void updateAdaptiveLevels(AudioFeatures& features);
 
-  std::array<int32_t,
-             config::kAudioFrameSamples * config::kI2sSlotsPerFrame>
-      rawSamples_{};
-  AudioBuffer buffer_{};
-  FFTAnalyzer fft_{};
-  i2s_chan_handle_t receiveChannel_{nullptr};
-  float gain_{1.0F};
-  float noiseFloor_{0.001F};
-};
+		std::array<int32_t, config::kAudioFrameSamples * config::kI2sSlotsPerFrame> rawSamples_{};
+		AudioBuffer buffer_{};
+		FFTAnalyzer fft_{};
+		i2s_chan_handle_t receiveChannel_{nullptr};
+		float gain_{1.0F};
+		float noiseFloor_{0.001F};
+	};
 
 }  // namespace vibhearing

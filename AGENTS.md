@@ -311,3 +311,40 @@ history. Keep claims separate from work that still needs hardware validation.
   the ignored local `WifiSecrets.h` is intentionally absent in CI. The
   workflow now copies the tracked placeholder configuration before compiling;
   no real Wi-Fi credentials are stored or used by CI.
+- Set `seeed_xiao_esp32c3` as PlatformIO's default environment so the normal
+  Build command compiles firmware only. The `native` environment remains
+  available explicitly through `pio test -e native`; it is a host test target,
+  not a standalone application with its own `main()` entry point.
+- Added shared PlatformIO post-build and pre-upload hooks. The standard toolbar
+  Build action compiles firmware and then runs native tests, while Upload runs
+  the same tests immediately before writing even when it reuses a cached
+  firmware build.
+- Expanded native FFT coverage from four to six tests with exact band-edge
+  routing and gain-scaling checks. Firmware build and all six native tests
+  pass; the guarded upload path was exercised only with an intentionally
+  invalid port, so no board firmware was written in this session.
+- Updated GitHub Actions to use the same firmware-build target and its native
+  test hook instead of running the suite redundantly in a separate step.
+- Colorized locally nested test status through the parent PlatformIO console:
+  passing summaries are green, failures red, and environment headings cyan.
+  GitHub Actions keeps plain output without forced ANSI control sequences.
+- Local Build and Upload now skip native tests with a yellow warning when
+  `gcc` or `g++` is absent from `PATH`, allowing a PlatformIO-only firmware
+  workflow. GitHub Actions treats a missing native compiler as an error so the
+  shared regression gate cannot silently disappear.
+- Added a repository-level clang-format policy based on Google style with
+  four-column tabs, preserved include order, attached braces, and a 120-column
+  limit. Applied clang-format 12.0.0 to all 37 tracked C/C++ source and header
+  files while leaving the ignored real `WifiSecrets.h` untouched.
+- The fully formatted firmware built successfully at 45,096 bytes RAM (13.8%)
+  and 1,064,708 bytes flash (54.2%), and all six native regression tests
+  passed. No board upload or hardware observation was performed.
+- Added `NamespaceIndentation: All` to the repository clang-format policy and
+  reformatted every tracked C/C++ source and header so namespace bodies use
+  the requested tab indentation. The firmware build and all six native tests
+  still passed; no board upload or hardware observation was performed.
+- Added a shared VS Code workspace setting that selects Microsoft C/C++ as the
+  C/C++ formatter, enables format-on-save, and explicitly discovers formatting
+  rules from the repository `.clang-format` file. Updated `.gitignore` so only
+  this shared settings file is trackable while existing machine-specific VS
+  Code configuration remains ignored.
