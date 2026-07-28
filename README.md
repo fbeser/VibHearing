@@ -304,6 +304,18 @@ Thank you to everyone supporting the continued development of VibHearing.
 
 Sponsors who choose public recognition may be acknowledged here.
 
+## License
+
+Except for the media exclusion below, VibHearing source code, build and test
+automation, and project documentation are licensed under the
+[GNU General Public License v3.0 or later](LICENSE) (`GPL-3.0-or-later`).
+
+Copyright © 2026 Fatih Beşer.
+
+Personal prototype photos, GIFs, and videos under `assets/` are excluded from
+the GPL license and remain © 2026 Fatih Beşer. All rights reserved. They may
+not be reused or redistributed without explicit permission.
+
 ## Disclaimer
 
 VibHearing is an **experimental research project**. It is not:

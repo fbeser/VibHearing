@@ -348,3 +348,7 @@ history. Keep claims separate from work that still needs hardware validation.
   rules from the repository `.clang-format` file. Updated `.gitignore` so only
   this shared settings file is trackable while existing machine-specific VS
   Code configuration remains ignored.
+- Licensed the source code, build/test automation, and project documentation
+  under `GPL-3.0-or-later` using the unmodified official GPLv3 license text.
+  Personal prototype GIF and video files under `assets/` are explicitly
+  excluded and remain all rights reserved.
