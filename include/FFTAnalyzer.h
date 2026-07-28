@@ -8,18 +8,17 @@
 
 namespace vibhearing {
 
-class FFTAnalyzer final {
- public:
-  BandEnergies analyze(const AudioBuffer::Samples& samples, float gain);
+	class FFTAnalyzer final {
+	   public:
+		BandEnergies analyze(const AudioBuffer::Samples& samples, float gain);
 
- private:
-  using ComplexFrame =
-      std::array<std::complex<float>, config::kAudioFrameSamples>;
+	   private:
+		using ComplexFrame = std::array<std::complex<float>, config::kAudioFrameSamples>;
 
-  void transform(ComplexFrame& frame) const;
-  static size_t reverseBits(size_t value);
+		void transform(ComplexFrame& frame) const;
+		static size_t reverseBits(size_t value);
 
-  ComplexFrame frame_{};
-};
+		ComplexFrame frame_{};
+	};
 
 }  // namespace vibhearing

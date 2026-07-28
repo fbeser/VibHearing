@@ -11,9 +11,9 @@
 #include "WifiSecrets.h"
 
 namespace vibhearing {
-namespace {
+	namespace {
 
-constexpr char kDashboardHtml[] PROGMEM = R"HTML(
+		constexpr char kDashboardHtml[] PROGMEM = R"HTML(
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VibHearing</title><style>
@@ -43,182 +43,173 @@ document.getElementById('settingsForm').addEventListener('submit',async e=>{e.pr
 </script></body></html>
 )HTML";
 
-bool parseBoolean(const String& value) { return value == "true" || value == "1"; }
+		bool parseBoolean(const String& value) {
+			return value == "true" || value == "1";
+		}
 
-}  // namespace
+	}  // namespace
 
-WebDashboard::WebDashboard(RuntimeSettings& settings) : settings_(settings) {}
+	WebDashboard::WebDashboard(RuntimeSettings& settings) : settings_(settings) {
+	}
 
-void WebDashboard::begin() {
-  registerRoutes();
-  WiFi.mode(WIFI_STA);
-  WiFi.setHostname(config::kDeviceHostname);
-  WiFi.begin(secrets::kWifiSsid, secrets::kWifiPassword);
-  connectionAttemptMs_ = millis();
-  Logger::info("Wi-Fi connection started");
-}
+	void WebDashboard::begin() {
+		registerRoutes();
+		WiFi.mode(WIFI_STA);
+		WiFi.setHostname(config::kDeviceHostname);
+		WiFi.begin(secrets::kWifiSsid, secrets::kWifiPassword);
+		connectionAttemptMs_ = millis();
+		Logger::info("Wi-Fi connection started");
+	}
 
-void WebDashboard::update() {
-  startServerIfReady();
-  reconnectIfNeeded();
-  if (serverStarted_) {
-    server_.handleClient();
-  }
-}
+	void WebDashboard::update() {
+		startServerIfReady();
+		reconnectIfNeeded();
+		if (serverStarted_) {
+			server_.handleClient();
+		}
+	}
 
-void WebDashboard::updateAudio(const AudioFeatures& features,
-                               const AudioEvent& event) {
-  latestFeatures_ = features;
-  latestEvent_ = event;
-  hasAudio_ = true;
-}
+	void WebDashboard::updateAudio(const AudioFeatures& features, const AudioEvent& event) {
+		latestFeatures_ = features;
+		latestEvent_ = event;
+		hasAudio_ = true;
+	}
 
-bool WebDashboard::connected() const { return WiFi.status() == WL_CONNECTED; }
+	bool WebDashboard::connected() const {
+		return WiFi.status() == WL_CONNECTED;
+	}
 
-void WebDashboard::registerRoutes() {
-  server_.on("/", HTTP_GET, [this]() { sendDashboard(); });
-  server_.on("/api/status", HTTP_GET, [this]() { sendStatus(); });
-  server_.on("/api/settings", HTTP_GET, [this]() { sendSettings(); });
-  server_.on("/api/settings", HTTP_POST, [this]() { applySettings(); });
-  server_.onNotFound([this]() { server_.send(404, "application/json", "{\"error\":\"not_found\"}"); });
-}
+	void WebDashboard::registerRoutes() {
+		server_.on("/", HTTP_GET, [this]() { sendDashboard(); });
+		server_.on("/api/status", HTTP_GET, [this]() { sendStatus(); });
+		server_.on("/api/settings", HTTP_GET, [this]() { sendSettings(); });
+		server_.on("/api/settings", HTTP_POST, [this]() { applySettings(); });
+		server_.onNotFound([this]() { server_.send(404, "application/json", "{\"error\":\"not_found\"}"); });
+	}
 
-void WebDashboard::startServerIfReady() {
-  if (serverStarted_ || !connected()) {
-    return;
-  }
-  server_.begin();
-  serverStarted_ = true;
-  if (MDNS.begin(config::kDeviceHostname)) {
-    MDNS.addService("http", "tcp", 80);
-  }
-  Serial.printf("[INFO] Dashboard ready: http://%s/ or http://%s.local/\n",
-                WiFi.localIP().toString().c_str(), config::kDeviceHostname);
-}
+	void WebDashboard::startServerIfReady() {
+		if (serverStarted_ || !connected()) {
+			return;
+		}
+		server_.begin();
+		serverStarted_ = true;
+		if (MDNS.begin(config::kDeviceHostname)) {
+			MDNS.addService("http", "tcp", 80);
+		}
+		Serial.printf("[INFO] Dashboard ready: http://%s/ or http://%s.local/\n", WiFi.localIP().toString().c_str(),
+					  config::kDeviceHostname);
+	}
 
-void WebDashboard::reconnectIfNeeded() {
-  if (connected() ||
-      millis() - connectionAttemptMs_ < config::kWifiConnectionTimeoutMs) {
-    return;
-  }
-  WiFi.disconnect();
-  WiFi.begin(secrets::kWifiSsid, secrets::kWifiPassword);
-  connectionAttemptMs_ = millis();
-  Logger::info("Wi-Fi reconnecting");
-}
+	void WebDashboard::reconnectIfNeeded() {
+		if (connected() || millis() - connectionAttemptMs_ < config::kWifiConnectionTimeoutMs) {
+			return;
+		}
+		WiFi.disconnect();
+		WiFi.begin(secrets::kWifiSsid, secrets::kWifiPassword);
+		connectionAttemptMs_ = millis();
+		Logger::info("Wi-Fi reconnecting");
+	}
 
-void WebDashboard::sendDashboard() {
-  server_.sendHeader("Cache-Control", "no-store");
-  server_.send_P(200, "text/html; charset=utf-8", kDashboardHtml);
-}
+	void WebDashboard::sendDashboard() {
+		server_.sendHeader("Cache-Control", "no-store");
+		server_.send_P(200, "text/html; charset=utf-8", kDashboardHtml);
+	}
 
-void WebDashboard::sendStatus() {
-  server_.sendHeader("Cache-Control", "no-store");
-  server_.send(200, "application/json", statusJson());
-}
+	void WebDashboard::sendStatus() {
+		server_.sendHeader("Cache-Control", "no-store");
+		server_.send(200, "application/json", statusJson());
+	}
 
-void WebDashboard::sendSettings() {
-  server_.sendHeader("Cache-Control", "no-store");
-  server_.send(200, "application/json", settingsJson());
-}
+	void WebDashboard::sendSettings() {
+		server_.sendHeader("Cache-Control", "no-store");
+		server_.send(200, "application/json", settingsJson());
+	}
 
-void WebDashboard::applySettings() {
-  if (server_.hasArg("motorEnabled")) {
-    settings_.motorEnabled = parseBoolean(server_.arg("motorEnabled"));
-  }
-  if (server_.hasArg("serialMetricsEnabled")) {
-    settings_.serialMetricsEnabled =
-        parseBoolean(server_.arg("serialMetricsEnabled"));
-  }
-  if (server_.hasArg("minimumVoiceSnr")) {
-    settings_.minimumVoiceSnr =
-        std::clamp(server_.arg("minimumVoiceSnr").toFloat(), 1.0F, 10.0F);
-  }
-  if (server_.hasArg("minimumVoiceRatio")) {
-    settings_.minimumVoiceRatio =
-        std::clamp(server_.arg("minimumVoiceRatio").toFloat(), 0.10F, 0.90F);
-  }
-  if (server_.hasArg("closeVoiceSnr")) {
-    settings_.closeVoiceSnr =
-        std::clamp(server_.arg("closeVoiceSnr").toFloat(), 2.0F, 30.0F);
-  }
-  if (server_.hasArg("minimumEventConfidence")) {
-    settings_.minimumEventConfidence = std::clamp(
-        server_.arg("minimumEventConfidence").toFloat(), 0.50F, 0.99F);
-  }
-  if (server_.hasArg("minimumHapticDuty")) {
-    settings_.minimumHapticDuty = static_cast<uint8_t>(std::clamp(
-        server_.arg("minimumHapticDuty").toInt(), 0L,
-        static_cast<long>(config::kMotorSafeMaximumDuty)));
-  }
-  if (server_.hasArg("maximumHapticDuty")) {
-    settings_.maximumHapticDuty = static_cast<uint8_t>(std::clamp(
-        server_.arg("maximumHapticDuty").toInt(), 0L,
-        static_cast<long>(config::kMotorSafeMaximumDuty)));
-  }
-  if (settings_.minimumHapticDuty > settings_.maximumHapticDuty) {
-    std::swap(settings_.minimumHapticDuty, settings_.maximumHapticDuty);
-  }
-  if (server_.hasArg("eventRetriggerGuardMs")) {
-    settings_.eventRetriggerGuardMs = static_cast<uint32_t>(std::clamp(
-        server_.arg("eventRetriggerGuardMs").toInt(), 200L, 5000L));
-  }
-  server_.send(200, "application/json", settingsJson());
-}
+	void WebDashboard::applySettings() {
+		if (server_.hasArg("motorEnabled")) {
+			settings_.motorEnabled = parseBoolean(server_.arg("motorEnabled"));
+		}
+		if (server_.hasArg("serialMetricsEnabled")) {
+			settings_.serialMetricsEnabled = parseBoolean(server_.arg("serialMetricsEnabled"));
+		}
+		if (server_.hasArg("minimumVoiceSnr")) {
+			settings_.minimumVoiceSnr = std::clamp(server_.arg("minimumVoiceSnr").toFloat(), 1.0F, 10.0F);
+		}
+		if (server_.hasArg("minimumVoiceRatio")) {
+			settings_.minimumVoiceRatio = std::clamp(server_.arg("minimumVoiceRatio").toFloat(), 0.10F, 0.90F);
+		}
+		if (server_.hasArg("closeVoiceSnr")) {
+			settings_.closeVoiceSnr = std::clamp(server_.arg("closeVoiceSnr").toFloat(), 2.0F, 30.0F);
+		}
+		if (server_.hasArg("minimumEventConfidence")) {
+			settings_.minimumEventConfidence =
+				std::clamp(server_.arg("minimumEventConfidence").toFloat(), 0.50F, 0.99F);
+		}
+		if (server_.hasArg("minimumHapticDuty")) {
+			settings_.minimumHapticDuty = static_cast<uint8_t>(std::clamp(
+				server_.arg("minimumHapticDuty").toInt(), 0L, static_cast<long>(config::kMotorSafeMaximumDuty)));
+		}
+		if (server_.hasArg("maximumHapticDuty")) {
+			settings_.maximumHapticDuty = static_cast<uint8_t>(std::clamp(
+				server_.arg("maximumHapticDuty").toInt(), 0L, static_cast<long>(config::kMotorSafeMaximumDuty)));
+		}
+		if (settings_.minimumHapticDuty > settings_.maximumHapticDuty) {
+			std::swap(settings_.minimumHapticDuty, settings_.maximumHapticDuty);
+		}
+		if (server_.hasArg("eventRetriggerGuardMs")) {
+			settings_.eventRetriggerGuardMs =
+				static_cast<uint32_t>(std::clamp(server_.arg("eventRetriggerGuardMs").toInt(), 200L, 5000L));
+		}
+		server_.send(200, "application/json", settingsJson());
+	}
 
-String WebDashboard::statusJson() const {
-  String json;
-  json.reserve(3600);
-  const float snr = latestFeatures_.rms /
-                    std::max(latestFeatures_.noiseFloor, 0.000001F);
-  json += "{\"wifi\":";
-  json += connected() ? "true" : "false";
-  json += ",\"ip\":\"" + WiFi.localIP().toString() + "\"";
-  json += ",\"rssi\":" + String(connected() ? WiFi.RSSI() : 0);
-  json += ",\"uptime\":" + String(millis() / 1000U);
-  json += ",\"event\":\"";
-  json += hasAudio_ ? audioEventName(latestEvent_.type) : "none";
-  json += "\",\"confidence\":" + String(latestEvent_.confidence, 4);
-  json += ",\"strength\":" + String(latestEvent_.acousticStrength, 4);
-  json += ",\"rms\":" + String(latestFeatures_.rms, 7);
-  json += ",\"peak\":" + String(latestFeatures_.peak, 7);
-  json += ",\"gain\":" + String(latestFeatures_.gain, 3);
-  json += ",\"noiseFloor\":" + String(latestFeatures_.noiseFloor, 7);
-  json += ",\"snr\":" + String(snr, 4);
-  json += ",\"bands\":[";
-  for (size_t index = 0; index < latestFeatures_.bands.size(); ++index) {
-    if (index > 0U) json += ',';
-    json += String(latestFeatures_.bands[index], 5);
-  }
-  json += "],\"waveform\":[";
-  for (size_t index = 0; index < latestFeatures_.waveform.size(); ++index) {
-    if (index > 0U) json += ',';
-    json += String(latestFeatures_.waveform[index]);
-  }
-  json += "]}";
-  return json;
-}
+	String WebDashboard::statusJson() const {
+		String json;
+		json.reserve(3600);
+		const float snr = latestFeatures_.rms / std::max(latestFeatures_.noiseFloor, 0.000001F);
+		json += "{\"wifi\":";
+		json += connected() ? "true" : "false";
+		json += ",\"ip\":\"" + WiFi.localIP().toString() + "\"";
+		json += ",\"rssi\":" + String(connected() ? WiFi.RSSI() : 0);
+		json += ",\"uptime\":" + String(millis() / 1000U);
+		json += ",\"event\":\"";
+		json += hasAudio_ ? audioEventName(latestEvent_.type) : "none";
+		json += "\",\"confidence\":" + String(latestEvent_.confidence, 4);
+		json += ",\"strength\":" + String(latestEvent_.acousticStrength, 4);
+		json += ",\"rms\":" + String(latestFeatures_.rms, 7);
+		json += ",\"peak\":" + String(latestFeatures_.peak, 7);
+		json += ",\"gain\":" + String(latestFeatures_.gain, 3);
+		json += ",\"noiseFloor\":" + String(latestFeatures_.noiseFloor, 7);
+		json += ",\"snr\":" + String(snr, 4);
+		json += ",\"bands\":[";
+		for (size_t index = 0; index < latestFeatures_.bands.size(); ++index) {
+			if (index > 0U) json += ',';
+			json += String(latestFeatures_.bands[index], 5);
+		}
+		json += "],\"waveform\":[";
+		for (size_t index = 0; index < latestFeatures_.waveform.size(); ++index) {
+			if (index > 0U) json += ',';
+			json += String(latestFeatures_.waveform[index]);
+		}
+		json += "]}";
+		return json;
+	}
 
-String WebDashboard::settingsJson() const {
-  String json;
-  json.reserve(400);
-  json += "{\"motorEnabled\":";
-  json += settings_.motorEnabled ? "true" : "false";
-  json += ",\"serialMetricsEnabled\":";
-  json += settings_.serialMetricsEnabled ? "true" : "false";
-  json += ",\"minimumVoiceSnr\":" + String(settings_.minimumVoiceSnr, 2);
-  json += ",\"minimumVoiceRatio\":" +
-          String(settings_.minimumVoiceRatio, 2);
-  json += ",\"closeVoiceSnr\":" + String(settings_.closeVoiceSnr, 2);
-  json += ",\"minimumEventConfidence\":" +
-          String(settings_.minimumEventConfidence, 2);
-  json += ",\"minimumHapticDuty\":" +
-          String(settings_.minimumHapticDuty);
-  json += ",\"maximumHapticDuty\":" +
-          String(settings_.maximumHapticDuty);
-  json += ",\"eventRetriggerGuardMs\":" +
-          String(settings_.eventRetriggerGuardMs) + "}";
-  return json;
-}
+	String WebDashboard::settingsJson() const {
+		String json;
+		json.reserve(400);
+		json += "{\"motorEnabled\":";
+		json += settings_.motorEnabled ? "true" : "false";
+		json += ",\"serialMetricsEnabled\":";
+		json += settings_.serialMetricsEnabled ? "true" : "false";
+		json += ",\"minimumVoiceSnr\":" + String(settings_.minimumVoiceSnr, 2);
+		json += ",\"minimumVoiceRatio\":" + String(settings_.minimumVoiceRatio, 2);
+		json += ",\"closeVoiceSnr\":" + String(settings_.closeVoiceSnr, 2);
+		json += ",\"minimumEventConfidence\":" + String(settings_.minimumEventConfidence, 2);
+		json += ",\"minimumHapticDuty\":" + String(settings_.minimumHapticDuty);
+		json += ",\"maximumHapticDuty\":" + String(settings_.maximumHapticDuty);
+		json += ",\"eventRetriggerGuardMs\":" + String(settings_.eventRetriggerGuardMs) + "}";
+		return json;
+	}
 
 }  // namespace vibhearing

@@ -2,14 +2,14 @@
 
 namespace vibhearing {
 
-class BleService final {
- public:
-  bool begin();
-  void update();
-  bool enabled() const;
+	class BleService final {
+	   public:
+		bool begin();
+		void update();
+		bool enabled() const;
 
- private:
-  bool enabled_{false};
-};
+	   private:
+		bool enabled_{false};
+	};
 
 }  // namespace vibhearing

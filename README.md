@@ -196,6 +196,9 @@ Runtime settings are validated but volatile: they return to compiled defaults af
 - Seeed Studio XIAO ESP32-C3
 - Supported I2S microphone wiring
 - Properly switched and protected motor circuit
+- Optional local GCC/G++ toolchain for native signal tests. If it is missing,
+  Build and Upload continue with a yellow warning; GitHub Actions still
+  requires and runs the tests.
 
 ### 1. Configure local Wi-Fi credentials
 
@@ -203,11 +206,18 @@ Copy `include/WifiSecrets.example.h` to `include/WifiSecrets.h`, then enter the 
 
 ### 2. Build
 
+The standard Build action compiles the firmware and then runs the native
+signal-processing regression tests.
+
 ```sh
 pio run
 ```
 
 ### 3. Upload
+
+The standard Upload action uses the same build-and-test chain. If any native
+test fails after compilation, PlatformIO cancels the upload before writing to
+the board.
 
 ```sh
 pio run --target upload

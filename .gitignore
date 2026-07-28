@@ -1,3 +1,5 @@
 .pio/
-.vscode/
+.vscode/*
+!.vscode/settings.json
+__pycache__/
 include/WifiSecrets.h
